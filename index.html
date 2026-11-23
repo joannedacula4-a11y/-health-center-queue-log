@@ -37,14 +37,14 @@
   <h1>HEALTH CENTER QUEUE LOG</h1>
   <p class="subtitle">Brgy. Caparan Ipil, Zamboanga Sibugay</p>
 
-  <!-- AUTOMATIC DATE & TIME - hindi na pwedeng baguhin ng user -->
   <div class="auto-time">
     Date & Time is Automatic<br>
     <span id="currentDateTime">Loading...</span>
   </div>
 
   <label for="name">Patient Name</label>
-  <input type="text" id="name" placeholder="e.g. JoAnne Dacula">
+  <input type="text" id="name" placeholder="e.g. Juan Dela Cruz">
+  <small style="color:#666;">Required: First Name + Last Name. Letters only.</small>
 
   <label for="purpose">Purpose of Visit</label>
   <select id="purpose" required>
@@ -95,7 +95,6 @@
     try{ localStorage.setItem('caparanQueue', JSON.stringify(queue)); }catch(e){}
   }
 
-  // AUTOMATIC DATE & TIME - galing sa system, hindi sa user input
   function getAutoDateTime(){
     var now = new Date();
     var yyyy = now.getFullYear();
@@ -116,115 +115,4 @@
   updateCurrentDateTimeDisplay();
   setInterval(updateCurrentDateTimeDisplay, 1000);
 
-  function formatTimeToAMPM(time24) {
-    if (!time24) return '';
-    var parts = time24.split(':');
-    var hour = parseInt(parts[0], 10);
-    var minute = parts[1] || '00';
-    var ampm = hour >= 12 ? 'PM' : 'AM';
-    var hour12 = hour % 12;
-    if (hour12 === 0) hour12 = 12;
-    return hour12 + ':' + minute + ' ' + ampm;
-  }
-
-  function formatDateToMDY(dateStr) {
-    if (!dateStr) return '';
-    var parts = dateStr.split('-');
-    if (parts.length !== 3) return dateStr;
-    return parts[1] + '-' + parts[2] + '-' + parts[0];
-  }
-
-  // Normalize name: tanggal extra spaces + lowercase para accurate comparison
-  function normalizeName(str){
-    return str.trim().toLowerCase().replace(/\s+/g, ' ');
-  }
-
-  function displayQueue() {
-    var list = document.getElementById('queueList');
-    var msg = document.getElementById('searchMsg');
-    list.innerHTML = '';
-    var count = 0;
-    for (var i = 0; i < queue.length; i++) {
-      var p = queue[i];
-      // EXACT MATCH SEARCH - kailangan buong pangalan, hindi partial
-      if (currentSearch !== '' && normalizeName(p.name) !== currentSearch) continue;
-      count++;
-      var tr = document.createElement('tr');
-      tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>';
-      list.appendChild(tr);
-    }
-    if (currentSearch !== '') {
-      if (count === 0) msg.textContent = "No patient found for '" + document.getElementById('search').value.trim() + "'. Please type complete name.";
-      else msg.textContent = "Found " + count + " patient(s) for '" + document.getElementById('search').value.trim() + "'";
-    } else {
-      if (queue.length === 0) {
-        list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>';
-        msg.textContent = '';
-      } else {
-        msg.textContent = 'Showing all ' + queue.length + ' patient(s)';
-      }
-    }
-    var btns = document.querySelectorAll('.deleteBtn');
-    for (var j = 0; j < btns.length; j++) {
-      btns[j].onclick = function(){ deleteOne(parseInt(this.getAttribute('data-index'),10)); };
-    }
-  }
-
-  function doSearch(){
-    currentSearch = normalizeName(document.getElementById('search').value);
-    displayQueue();
-  }
-  function clearSearch(){
-    document.getElementById('search').value = '';
-    currentSearch = '';
-    displayQueue();
-  }
-
-  function addPatient() {
-    var nameInput = document.getElementById('name');
-    var name = nameInput.value.trim();
-    var error = document.getElementById('error');
-    if (name === '') { error.style.display = 'block'; return; }
-    error.style.display = 'none';
-
-    var purpose = document.getElementById('purpose').value;
-    if (purpose === '') { purpose = 'Check-up'; }
-
-    var auto = getAutoDateTime();
-    var date = auto.date;
-    var time = auto.time;
-
-    queue.push({ date: date, name: name, purpose: purpose, time: time });
-    saveQueue();
-    clearSearch();
-    displayQueue();
-    nameInput.value = '';
-    document.getElementById('purpose').value = '';
-    alert('Added: ' + name + ' | ' + formatDateToMDY(date) + ' ' + formatTimeToAMPM(time));
-  }
-
-  function deleteOne(index) {
-    queue.splice(index, 1);
-    saveQueue();
-    displayQueue();
-  }
-
-  function clearQueue() {
-    if (confirm("Are you sure you want to clear all patients from the queue?")) {
-      queue = [];
-      saveQueue();
-      clearSearch();
-      displayQueue();
-      alert('Queue cleared');
-    }
-  }
-
-  document.getElementById('addBtn').onclick = addPatient;
-  document.getElementById('clearBtn').onclick = clearQueue;
-  document.getElementById('searchBtn').onclick = doSearch;
-  document.getElementById('clearSearchBtn').onclick = clearSearch;
-  document.getElementById('search').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ doSearch(); } });
-  displayQueue();
-</script>
-</body>
-                                                                </html>
+  function formatTimeToAMPM(time24
