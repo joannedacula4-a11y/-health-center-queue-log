@@ -13,7 +13,6 @@ h1 { text-align: center; color: #1a5c2a; margin-bottom: 5px; line-height: 1.2; t
 label { display: block; margin-top: 12px; font-weight: bold; }
 input, select { width: 100%; padding: 12px; margin-top: 5px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
 button { width: 100%; padding: 12px; margin-top: 15px; background: #1a5c2a; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-button:hover { background: #144a21; }
 #error { color: red; margin-top: 10px; display: none; font-weight: bold; }
 table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; word-wrap: break-word; }
 th, td { border: 1px solid #ddd; padding: 12px 8px; text-align: left; font-size: 14px; vertical-align: top; }
@@ -52,78 +51,67 @@ th { background: #1a5c2a; color: white; }
 <input type="time" id="time">
 <div id="error">Please enter a patient name.</div>
 
-<button onclick="addPatient()">ADD TO QUEUE</button>
-<button onclick="clearQueue()" style="background:#c0392b;">CLEAR ALL</button>
+<button id="addBtn">ADD TO QUEUE</button>
+<button id="clearBtn" style="background:#c0392b;">CLEAR ALL</button>
 
 <table>
 <thead>
-<tr>
-<th>Queue No.</th>
-<th>Date</th>
-<th>Patient Name</th>
-<th>Purpose</th>
-<th>Time</th>
-<th>Action</th>
-</tr>
+<tr><th>Queue No.</th><th>Date</th><th>Patient Name</th><th>Purpose</th><th>Time</th><th>Action</th></tr>
 </thead>
 <tbody id="queueList"></tbody>
 </table>
 </div>
 
 <script>
-let queue = JSON.parse(localStorage.getItem('queue')) || [];
+var queue = [];
 
 function displayQueue() {
-  let list = document.getElementById('queueList');
+  var list = document.getElementById('queueList');
   list.innerHTML = '';
-  queue.forEach(function(p, index) {
-    let row = '<tr><td>' + (index + 1) + '</td><td>' + (p.date || '') + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + p.time + '</td><td><button class="deleteBtn" onclick="deleteOne(' + index + ')">X</button></td></tr>';
-    list.innerHTML += row;
-  });
+  for (var i = 0; i < queue.length; i++) {
+    var p = queue[i];
+    list.innerHTML += '<tr><td>' + (i+1) + '</td><td>' + p.date + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + p.time + '</td><td><button class="deleteBtn" onclick="deleteOne(' + i + ')">X</button></td></tr>';
+  }
 }
 
 function addPatient() {
-  let nameInput = document.getElementById('name');
-  let name = nameInput.value.trim();
-  let error = document.getElementById('error');
-  if (name === '') {
-    error.style.display = 'block';
-    return;
-  }
+  var nameInput = document.getElementById('name');
+  var name = nameInput.value.trim();
+  var error = document.getElementById('error');
+  if (name === '') { error.style.display = 'block'; return; }
   error.style.display = 'none';
-
-  let date = document.getElementById('visitDate').value;
-  let purpose = document.getElementById('purpose').value;
-  let time = document.getElementById('time').value;
+  var date = document.getElementById('visitDate').value;
+  var purpose = document.getElementById('purpose').value;
+  var time = document.getElementById('time').value;
   if (time === '') {
-    let now = new Date();
+    var now = new Date();
     time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
   }
-
-  let patient = { date: date, name: name, purpose: purpose, time: time };
-  queue.push(patient);
-  localStorage.setItem('queue', JSON.stringify(queue));
+  queue.push({ date: date, name: name, purpose: purpose, time: time });
   displayQueue();
   nameInput.value = '';
+  alert('Added: ' + name);
 }
 
 function deleteOne(index) {
   queue.splice(index, 1);
-  localStorage.setItem('queue', JSON.stringify(queue));
   displayQueue();
 }
 
 function clearQueue() {
   if (confirm("Are you sure you want to clear all patients from the queue?")) {
-    localStorage.removeItem('queue');
     queue = [];
     displayQueue();
+    alert('Queue cleared');
   }
 }
 
-// Show today's date automatically
-const today = new Date();
-const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+document.getElementById('addBtn').addEventListener('click', addPatient);
+document.getElementById('clearBtn').addEventListener('click', clearQueue);
+
+// Date on top
+var today = new Date();
+var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
 document.getElementById('visitDate').valueAsDate = today;
 
