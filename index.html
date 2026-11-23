@@ -30,7 +30,7 @@ td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 <p class="subtitle">Brgy. Caparan Ipil, Zamboanga Sibugay</p>
 
 <label for="name">Patient Name</label>
-<input type="text" id="name" placeholder="e.g. Juan Dela Cruz">
+<input type="text" id="name" placeholder="e.g. JoAnne Dacula">
 
 <label for="purpose">Purpose of Visit</label>
 <select id="purpose" required>
@@ -50,9 +50,11 @@ td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 
 <label for="visitDate">Date</label>
 <input type="date" id="visitDate">
+<option value="" disabled selected>Select Date</option>
 
 <label for="time">Time of Arrival</label>
 <input type="time" id="time">
+<option value="" disabled selected>Select Time of Arrival</option>
 <div id="error">Please enter a patient name.</div>
 
 <button id="addBtn">ADD TO QUEUE</button>
