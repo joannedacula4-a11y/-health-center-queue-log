@@ -7,11 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 <style>
 body { font-family: Arial, sans-serif; background: #f2f7f2; margin: 0; padding: 20px; }
-.container { max-width: 800px; margin: auto; background: white; padding: 22px; border-radius: 10px; overflow: hidden; }
-h1 { font-family: 'Playfair Display', Georgia, serif; font-weight: 800; text-align: center; color: #1a5c2a; margin-bottom: 8px; margin-top: 5px; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.5px; font-size: 28px; word-break: normal; }
-.subtitle { font-family: 'Merriweather', Georgia, serif; font-weight: 400; text-align: center; color: #444; margin-top: 0; margin-bottom: 22px; line-height: 1.6; font-size: 16px; letter-spacing: 0.4px; }
+.container { max-width: 800px; margin: auto; background: white; padding: 28px 22px 22px 22px; border-radius: 10px; overflow: hidden; }
+h1 { font-family: 'Playfair Display', Georgia, serif; font-weight: 800; text-align: center; color: #1a5c2a; margin-bottom: 18px; margin-top: 10px; line-height: 1.45; text-transform: uppercase; letter-spacing: 0.5px; font-size: 28px; word-break: normal; }
+.subtitle { font-family: 'Merriweather', Georgia, serif; font-weight: 400; text-align: center; color: #444; margin-top: 0; margin-bottom: 30px; line-height: 1.9; font-size: 16px; letter-spacing: 0.4px; }
 label { display: block; margin-top: 14px; font-weight: bold; line-height: 1.5; }
 input, select { width: 100%; padding: 14px 12px; margin-top: 6px; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; line-height: 1.5; }
+select:invalid { color: #888; }
 button { width: 100%; padding: 14px; margin-top: 16px; background: #1a5c2a; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; line-height: 1.5; }
 #error { color: red; margin-top: 10px; display: none; font-weight: bold; }
 .table-wrap { overflow-x: auto; margin-top: 22px; }
@@ -29,107 +30,4 @@ td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 <p class="subtitle">Brgy. Caparan Ipil, Zamboanga Sibugay</p>
 
 <label for="name">Patient Name</label>
-<input type="text" id="name" placeholder="e.g. Juan Dela Cruz">
-
-<label for="purpose">Purpose of Visit</label>
-<select id="purpose">
-<option value="Check-up">Check-up</option>
-<option value="Vaccination">Vaccination</option>
-<option value="Prenatal">Prenatal</option>
-<option value="Medicine Request">Medicine Request</option>
-<option value="Dental">Dental</option>
-<option value="Family Planning">Family Planning</option>
-<option value="Immunization">Immunization</option>
-<option value="Wound Dressing">Wound Dressing</option>
-<option value="Follow-up Check-up">Follow-up Check-up</option>
-<option value="Consultation">Consultation</option>
-<option value="Others">Others</option>
-</select>
-
-<label for="visitDate">Date</label>
-<input type="date" id="visitDate">
-
-<label for="time">Time of Arrival</label>
-<input type="time" id="time">
-<div id="error">Please enter a patient name.</div>
-
-<button id="addBtn">ADD TO QUEUE</button>
-<button id="clearBtn" style="background:#c0392b;">CLEAR ALL</button>
-
-<div class="table-wrap">
-<table>
-<thead>
-<tr><th>Queue No.</th><th>Patient Name</th><th>Purpose</th><th>Date</th><th>Time</th><th>Delete</th></tr>
-</thead>
-<tbody id="queueList"></tbody>
-</table>
-</div>
-</div>
-
-<script>
-var queue = [];
-
-function formatTimeToAMPM(time24) {
-  if (!time24) return '';
-  var parts = time24.split(':');
-  var hour = parseInt(parts[0], 10);
-  var minute = parts[1];
-  var ampm = hour >= 12 ? 'PM' : 'AM';
-  var hour12 = hour % 12;
-  if (hour12 === 0) hour12 = 12;
-  return hour12 + ':' + minute + ' ' + ampm;
-}
-
-function formatDateToMDY(dateStr) {
-  if (!dateStr) return '';
-  var parts = dateStr.split('-');
-  if (parts.length !== 3) return dateStr;
-  return parts[1] + '-' + parts[2] + '-' + parts[0];
-}
-
-function displayQueue() {
-  var list = document.getElementById('queueList');
-  list.innerHTML = '';
-  for (var i = 0; i < queue.length; i++) {
-    var p = queue[i];
-    list.innerHTML += '<tr><td>' + (i+1) + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" onclick="deleteOne(' + i + ')">X</button></td></tr>';
-  }
-}
-
-function addPatient() {
-  var nameInput = document.getElementById('name');
-  var name = nameInput.value.trim();
-  var error = document.getElementById('error');
-  if (name === '') { error.style.display = 'block'; return; }
-  error.style.display = 'none';
-  var date = document.getElementById('visitDate').value;
-  var purpose = document.getElementById('purpose').value;
-  var time = document.getElementById('time').value;
-  if (time === '') {
-    var now = new Date();
-    time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-  }
-  queue.push({ date: date, name: name, purpose: purpose, time: time });
-  displayQueue();
-  nameInput.value = '';
-  alert('Added: ' + name);
-}
-
-function deleteOne(index) { queue.splice(index, 1); displayQueue(); }
-
-function clearQueue() {
-  if (confirm("Are you sure you want to clear all patients from the queue?")) {
-    queue = [];
-    displayQueue();
-    alert('Queue cleared');
-  }
-}
-
-document.getElementById('addBtn').addEventListener('click', addPatient);
-document.getElementById('clearBtn').addEventListener('click', clearQueue);
-var today = new Date();
-document.getElementById('visitDate').valueAsDate = today;
-displayQueue();
-</script>
-</body>
-</html>
+<input type
