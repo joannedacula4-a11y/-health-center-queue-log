@@ -17,7 +17,7 @@
   input::placeholder { color: #888; }
   select:invalid { color: #888; }
   button { width: 100%; padding: 14px; margin-top: 16px; background: #1a5c2a; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; line-height: 1.5; display: block; }
-  #error { color: red; margin-top: 10px; display: none; font-weight: bold; }
+  #error { color: red; margin-top: 10px; display: none; font-weight: bold; background: #ffe6e6; padding: 10px; border-radius: 5px; }
   .table-wrap { overflow-x: auto; margin-top: 22px; }
   table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 700px; }
   th, td { border: 1px solid #ddd; padding: 16px 14px; text-align: left; font-size: 15px; line-height: 1.6; letter-spacing: 0.3px; vertical-align: middle; }
@@ -43,7 +43,7 @@
   </div>
 
   <label for="name">Patient Name</label>
-  <input type="text" id="name" placeholder="e.g. Juan Dela Cruz">
+  <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" autocomplete="off">
   <small style="color:#666;">Required: First Name + Last Name. Letters only.</small>
 
   <label for="purpose">Purpose of Visit</label>
@@ -63,8 +63,8 @@
   </select>
 
   <div id="error">Please enter a patient name.</div>
-  <button id="addBtn">ADD TO QUEUE</button>
-  <button id="clearBtn" style="background:#c0392b;">CLEAR ALL</button>
+  <button id="addBtn" type="button">ADD TO QUEUE</button>
+  <button id="clearBtn" type="button" style="background:#c0392b;">CLEAR ALL</button>
 
   <div class="search-box">
     <label for="search">Search Patient</label>
@@ -115,4 +115,159 @@
   updateCurrentDateTimeDisplay();
   setInterval(updateCurrentDateTimeDisplay, 1000);
 
-  function formatTimeToAMPM(time24
+  function formatTimeToAMPM(time24) {
+    if (!time24) return '';
+    var parts = time24.split(':');
+    var hour = parseInt(parts[0], 10);
+    var minute = parts[1] || '00';
+    var ampm = hour >= 12 ? 'PM' : 'AM';
+    var hour12 = hour % 12;
+    if (hour12 === 0) hour12 = 12;
+    return hour12 + ':' + minute + ' ' + ampm;
+  }
+
+  function formatDateToMDY(dateStr) {
+    if (!dateStr) return '';
+    var parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return parts[1] + '-' + parts[2] + '-' + parts[0];
+  }
+
+  function normalizeName(str){
+    return str.trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  // FIXED VALIDATION - mas strict, hindi na makakalusot ang one name
+  function validateName(rawName){
+    var clean = rawName.trim().replace(/\s+/g, ' ');
+
+    // 1. Blank
+    if (clean === '') {
+      return { valid: false, message: 'Please enter a patient name.' };
+    }
+    // 2. Symbols / Numbers - BAWAL kahit ano maliban sa letters, space, hyphen, apostrophe
+    if (/[0-9@#$%^&*()_+=\[\]{};:\\|\"<>\/?.!,~`]/.test(clean)) {
+      return { valid: false, message: 'Invalid name. Letters only. No numbers or symbols.' };
+    }
+    if (!/^[A-Za-zÑñ' \-]+$/.test(clean)) {
+      return { valid: false, message: 'Invalid name. Letters only. No numbers or symbols.' };
+    }
+    // 3. FIX: Kailangan may SPACE talaga = First + Last
+    // Kung walang space, isang pangalan lang yan
+    if (clean.indexOf(' ') === -1) {
+      return { valid: false, message: 'Please enter First Name and Last Name. One name is not allowed.' };
+    }
+    // 4. Bilangin yung words - dapat at least 2
+    var parts = clean.split(' ').filter(function(w){ return w.length > 0; });
+    if (parts.length < 2) {
+      return { valid: false, message: 'Please enter First Name and Last Name. One name is not allowed.' };
+    }
+    // 5. Bawat word at least 2 letters
+    for (var i = 0; i < parts.length; i++) {
+      var wordOnlyLetters = parts[i].replace(/['-]/g, '');
+      if (wordOnlyLetters.length < 2) {
+        return { valid: false, message: 'First Name and Last Name must be at least 2 letters each.' };
+      }
+    }
+    return { valid: true, message: '', clean: clean };
+  }
+
+  function displayQueue() {
+    var list = document.getElementById('queueList');
+    var msg = document.getElementById('searchMsg');
+    list.innerHTML = '';
+    var count = 0;
+    for (var i = 0; i < queue.length; i++) {
+      var p = queue[i];
+      if (currentSearch !== '' && normalizeName(p.name) !== currentSearch) continue;
+      count++;
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>';
+      list.appendChild(tr);
+    }
+    if (currentSearch !== '') {
+      if (count === 0) msg.textContent = "No patient found for '" + document.getElementById('search').value.trim() + "'. Please type complete name.";
+      else msg.textContent = "Found " + count + " patient(s) for '" + document.getElementById('search').value.trim() + "'";
+    } else {
+      if (queue.length === 0) {
+        list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>';
+        msg.textContent = '';
+      } else {
+        msg.textContent = 'Showing all ' + queue.length + ' patient(s)';
+      }
+    }
+    var btns = document.querySelectorAll('.deleteBtn');
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].onclick = function(){ deleteOne(parseInt(this.getAttribute('data-index'),10)); };
+    }
+  }
+
+  function doSearch(){
+    currentSearch = normalizeName(document.getElementById('search').value);
+    displayQueue();
+  }
+  function clearSearch(){
+    document.getElementById('search').value = '';
+    currentSearch = '';
+    displayQueue();
+  }
+
+  function addPatient() {
+    var nameInput = document.getElementById('name');
+    var error = document.getElementById('error');
+
+    // VALIDATION - pag failed, STOP agad, hindi mag-a-add
+    var check = validateName(nameInput.value);
+    if (!check.valid) {
+      error.textContent = check.message;
+      error.style.display = 'block';
+      alert(check.message);
+      nameInput.focus();
+      return; // <-- DITO HUMIHINTO, hindi tutuloy sa pag-add
+    }
+    error.style.display = 'none';
+    var name = check.clean;
+
+    var purpose = document.getElementById('purpose').value;
+    if (purpose === '') { purpose = 'Check-up'; }
+
+    var auto = getAutoDateTime();
+    var date = auto.date;
+    var time = auto.time;
+
+    queue.push({ date: date, name: name, purpose: purpose, time: time });
+    saveQueue();
+    clearSearch();
+    displayQueue();
+    nameInput.value = '';
+    document.getElementById('purpose').value = '';
+    alert('Added: ' + name + ' | ' + formatDateToMDY(date) + ' ' + formatTimeToAMPM(time));
+  }
+
+  function deleteOne(index) {
+    queue.splice(index, 1);
+    saveQueue();
+    displayQueue();
+  }
+
+  function clearQueue() {
+    if (confirm("Are you sure you want to clear all patients from the queue?")) {
+      queue = [];
+      saveQueue();
+      clearSearch();
+      displayQueue();
+      alert('Queue cleared');
+    }
+  }
+
+  document.getElementById('addBtn').onclick = addPatient;
+  document.getElementById('clearBtn').onclick = clearQueue;
+  document.getElementById('searchBtn').onclick = doSearch;
+  document.getElementById('clearSearchBtn').onclick = clearSearch;
+  document.getElementById('search').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ doSearch(); } });
+  // Para hindi makalusot pag nag-Enter sa name field
+  document.getElementById('name').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); addPatient(); } });
+  displayQueue();
+</script>
+</body>
+</html>
