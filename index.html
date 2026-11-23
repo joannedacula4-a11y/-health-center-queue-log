@@ -23,6 +23,7 @@ th { background: #1a5c2a; color: white; }
 <div class="container">
 <h1>HEALTH CENTER QUEUE LOG</h1>
 <p>Brgy. Caparan Ipil, Zamboanga Sibugay</p>
+<p id="currentDate" style="text-align:center; font-size:16px; font-weight:bold; color:#1a5c2a; margin-top:5px;"></p>
 
 <label for="name">Patient Name</label>
 <input type="text" id="name" placeholder="e.g. Juan Dela Cruz">
@@ -52,7 +53,10 @@ th { background: #1a5c2a; color: white; }
 <table>
 <thead>
 <tr>
-<th>Queue No.</th>
+<th>Queue No.</th> 
+<label style="font-weight:bold;">Date</label>
+<input type="date" id="visitDate" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:5px;">
+Patient Name
 <th>Patient Name</th>
 <th>Purpose</th>
 <th>Time of Arrival</th>
@@ -107,6 +111,13 @@ displayQueue();
     location.reload();
   }
     }
+  
+Show today's date automatically
+const today = new Date();
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+document.getElementById('visitDate').valueAsDate = today;
+  
 </script>
 </body>
   </html>
