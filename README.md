@@ -1,4 +1,4 @@
- HEALTH CENTER QUEUE LOG
+       HEALTH CENTER QUEUE LOG
 
  Location: Brgy. Caparan Ipil, Zamboanga Sibugay
 
