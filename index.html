@@ -69,7 +69,7 @@
   <div class="search-box">
     <label for="search">Search Patient</label>
     <div class="search-row">
-      <input type="text" id="search" placeholder="Type name here...">
+      <input type="text" id="search" placeholder="Type complete name...">
       <button id="searchBtn" type="button">SEARCH</button>
       <button id="clearSearchBtn" type="button" style="background:#666;">CLEAR</button>
     </div>
@@ -101,10 +101,10 @@
     var yyyy = now.getFullYear();
     var mm = String(now.getMonth()+1).padStart(2,'0');
     var dd = String(now.getDate()).padStart(2,'0');
-    var date = yyyy + '-' + mm + '-' + dd; // YYYY-MM-DD for storage
+    var date = yyyy + '-' + mm + '-' + dd;
     var hh = String(now.getHours()).padStart(2,'0');
     var min = String(now.getMinutes()).padStart(2,'0');
-    var time = hh + ':' + min; // 24h for storage
+    var time = hh + ':' + min;
     return { date: date, time: time, now: now };
   }
 
@@ -113,7 +113,6 @@
     var display = auto.now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) + ' | ' + auto.now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     document.getElementById('currentDateTime').textContent = display;
   }
-  // Update every second para live talaga
   updateCurrentDateTimeDisplay();
   setInterval(updateCurrentDateTimeDisplay, 1000);
 
@@ -135,6 +134,11 @@
     return parts[1] + '-' + parts[2] + '-' + parts[0];
   }
 
+  // Normalize name: tanggal extra spaces + lowercase para accurate comparison
+  function normalizeName(str){
+    return str.trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
   function displayQueue() {
     var list = document.getElementById('queueList');
     var msg = document.getElementById('searchMsg');
@@ -142,15 +146,16 @@
     var count = 0;
     for (var i = 0; i < queue.length; i++) {
       var p = queue[i];
-      if (currentSearch !== '' && p.name.toLowerCase().indexOf(currentSearch) === -1) continue;
+      // EXACT MATCH SEARCH - kailangan buong pangalan, hindi partial
+      if (currentSearch !== '' && normalizeName(p.name) !== currentSearch) continue;
       count++;
       var tr = document.createElement('tr');
       tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>';
       list.appendChild(tr);
     }
     if (currentSearch !== '') {
-      if (count === 0) msg.textContent = "No patient found for '" + currentSearch + "'. Press CLEAR to show all.";
-      else msg.textContent = "Found " + count + " patient(s) for '" + currentSearch + "'";
+      if (count === 0) msg.textContent = "No patient found for '" + document.getElementById('search').value.trim() + "'. Please type complete name.";
+      else msg.textContent = "Found " + count + " patient(s) for '" + document.getElementById('search').value.trim() + "'";
     } else {
       if (queue.length === 0) {
         list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>';
@@ -166,7 +171,7 @@
   }
 
   function doSearch(){
-    currentSearch = document.getElementById('search').value.trim().toLowerCase();
+    currentSearch = normalizeName(document.getElementById('search').value);
     displayQueue();
   }
   function clearSearch(){
@@ -185,7 +190,6 @@
     var purpose = document.getElementById('purpose').value;
     if (purpose === '') { purpose = 'Check-up'; }
 
-    // DITO NA KINUKUHA AUTOMATIC - hindi na galing sa input
     var auto = getAutoDateTime();
     var date = auto.date;
     var time = auto.time;
@@ -219,9 +223,8 @@
   document.getElementById('clearBtn').onclick = clearQueue;
   document.getElementById('searchBtn').onclick = doSearch;
   document.getElementById('clearSearchBtn').onclick = clearSearch;
-  document.getElementById('search').addEventListener('input', doSearch);
   document.getElementById('search').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ doSearch(); } });
   displayQueue();
 </script>
 </body>
-  </html>
+                                                                </html>
