@@ -6,193 +6,222 @@
 <title>Health Center Queue Log - Brgy. Caparan</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 <style>
-body { font-family: Arial, sans-serif; background: #f2f7f2; margin: 0; padding: 20px; }
-.container { max-width: 800px; margin: auto; background: white; padding: 28px 22px 22px 22px; border-radius: 10px; }
-h1 { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 800; text-align: center; color: #1a5c2a; margin-bottom: 18px; margin-top: 10px; line-height: 1.45; text-transform: uppercase; letter-spacing: 0.5px; font-size: 28px; }
-.subtitle { font-family: 'Merriweather', Georgia, 'Times New Roman', serif; font-weight: 400; text-align: center; color: #444; margin-top: 0; margin-bottom: 30px; line-height: 1.9; font-size: 16px; letter-spacing: 0.4px; }
-label { display: block; margin-top: 14px; font-weight: bold; line-height: 1.5; }
-input, select { width: 100%; padding: 14px 12px; margin-top: 6px; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; line-height: 1.5; background: white; display: block; }
-input::placeholder { color: #888; }
-select:invalid { color: #888; }
-button { width: 100%; padding: 14px; margin-top: 16px; background: #1a5c2a; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; line-height: 1.5; display: block; }
-#error { color: red; margin-top: 10px; display: none; font-weight: bold; }
-.table-wrap { overflow-x: auto; margin-top: 22px; }
-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 700px; }
-th, td { border: 1px solid #ddd; padding: 16px 14px; text-align: left; font-size: 15px; line-height: 1.6; letter-spacing: 0.3px; vertical-align: middle; }
-th { background: #1a5c2a; color: white; white-space: nowrap; }
-td { word-break: normal; overflow-wrap: break-word; }
-td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
-.deleteBtn { background: #c0392b; color: white; border: none; padding: 8px 14px; border-radius: 5px; cursor: pointer; width: auto; min-width: 40px; margin: 0; font-size: 18px; font-weight: bold; line-height: 1; white-space: nowrap; }
-.search-box { background: #f2f7f2; padding: 14px; border-radius: 8px; margin-top: 20px; border: 1px solid #d0e8d0; }
-.search-row { display: flex; gap: 8px; }
-.search-row input { flex: 1; }
-.search-row button { width: 95px; margin-top: 6px; padding: 14px 6px; font-size: 14px; }
-#searchMsg { font-size: 13px; color: #1a5c2a; margin: 8px 0 0 0; font-weight: bold; }
+  body { font-family: Arial, sans-serif; background: #f2f7f2; margin: 0; padding: 20px; }
+  .container { max-width: 800px; margin: auto; background: white; padding: 28px 22px 22px 22px; border-radius: 10px; }
+  h1 { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-weight: 800; text-align: center; color: #1a5c2a; margin-bottom: 8px; margin-top: 10px; line-height: 1.45; text-transform: uppercase; letter-spacing: 0.5px; font-size: 28px; }
+  .subtitle { font-family: 'Merriweather', Georgia, 'Times New Roman', serif; font-weight: 400; text-align: center; color: #444; margin-top: 0; margin-bottom: 8px; line-height: 1.9; font-size: 16px; letter-spacing: 0.4px; }
+  .auto-time { text-align: center; background: #f2f7f2; border: 1px solid #d0e8d0; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; color: #1a5c2a; font-weight: bold; line-height: 1.6; }
+  .auto-time span { color: #333; font-weight: normal; }
+  label { display: block; margin-top: 14px; font-weight: bold; line-height: 1.5; }
+  input, select { width: 100%; padding: 14px 12px; margin-top: 6px; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; line-height: 1.5; background: white; display: block; }
+  input::placeholder { color: #888; }
+  select:invalid { color: #888; }
+  button { width: 100%; padding: 14px; margin-top: 16px; background: #1a5c2a; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; line-height: 1.5; display: block; }
+  #error { color: red; margin-top: 10px; display: none; font-weight: bold; }
+  .table-wrap { overflow-x: auto; margin-top: 22px; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 700px; }
+  th, td { border: 1px solid #ddd; padding: 16px 14px; text-align: left; font-size: 15px; line-height: 1.6; letter-spacing: 0.3px; vertical-align: middle; }
+  th { background: #1a5c2a; color: white; white-space: nowrap; }
+  td { word-break: normal; overflow-wrap: break-word; }
+  td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
+  .deleteBtn { background: #c0392b; color: white; border: none; padding: 8px 14px; border-radius: 5px; cursor: pointer; width: auto; min-width: 40px; margin: 0; font-size: 18px; font-weight: bold; line-height: 1; white-space: nowrap; }
+  .search-box { background: #f2f7f2; padding: 14px; border-radius: 8px; margin-top: 20px; border: 1px solid #d0e8d0; }
+  .search-row { display: flex; gap: 8px; }
+  .search-row input { flex: 1; }
+  .search-row button { width: 95px; margin-top: 6px; padding: 14px 6px; font-size: 14px; }
+  #searchMsg { font-size: 13px; color: #1a5c2a; margin: 8px 0 0 0; font-weight: bold; }
 </style>
 </head>
 <body>
 <div class="container">
-<h1>HEALTH CENTER QUEUE LOG</h1>
-<p class="subtitle">Brgy. Caparan Ipil, Zamboanga Sibugay</p>
+  <h1>HEALTH CENTER QUEUE LOG</h1>
+  <p class="subtitle">Brgy. Caparan Ipil, Zamboanga Sibugay</p>
 
-<label for="name">Patient Name</label>
-<input type="text" id="name" placeholder="e.g. JoAnne Dacula">
+  <!-- AUTOMATIC DATE & TIME - hindi na pwedeng baguhin ng user -->
+  <div class="auto-time">
+    Date & Time is Automatic<br>
+    <span id="currentDateTime">Loading...</span>
+  </div>
 
-<label for="purpose">Purpose of Visit</label>
-<select id="purpose" required>
-<option value="" disabled selected>Select Purpose of Visit</option>
-<option value="Check-up">Check-up</option>
-<option value="Vaccination">Vaccination</option>
-<option value="Prenatal">Prenatal</option>
-<option value="Medicine Request">Medicine Request</option>
-<option value="Dental">Dental</option>
-<option value="Family Planning">Family Planning</option>
-<option value="Immunization">Immunization</option>
-<option value="Wound Dressing">Wound Dressing</option>
-<option value="Follow-up Check-up">Follow-up Check-up</option>
-<option value="Consultation">Consultation</option>
-<option value="Others">Others</option>
-</select>
+  <label for="name">Patient Name</label>
+  <input type="text" id="name" placeholder="e.g. JoAnne Dacula">
 
-<label for="visitDate">Date</label>
-<input type="text" id="visitDate" placeholder="Select Date" onfocus="this.type='date'" onblur="if(!this.value) this.type='text'">
+  <label for="purpose">Purpose of Visit</label>
+  <select id="purpose" required>
+    <option value="" disabled selected>Select Purpose of Visit</option>
+    <option value="Check-up">Check-up</option>
+    <option value="Vaccination">Vaccination</option>
+    <option value="Prenatal">Prenatal</option>
+    <option value="Medicine Request">Medicine Request</option>
+    <option value="Dental">Dental</option>
+    <option value="Family Planning">Family Planning</option>
+    <option value="Immunization">Immunization</option>
+    <option value="Wound Dressing">Wound Dressing</option>
+    <option value="Follow-up Check-up">Follow-up Check-up</option>
+    <option value="Consultation">Consultation</option>
+    <option value="Others">Others</option>
+  </select>
 
-<label for="time">Time of Arrival</label>
-<input type="text" id="time" placeholder="Select Time of Arrival" onfocus="this.type='time'" onblur="if(!this.value) this.type='text'">
-<div id="error">Please enter a patient name.</div>
+  <div id="error">Please enter a patient name.</div>
+  <button id="addBtn">ADD TO QUEUE</button>
+  <button id="clearBtn" style="background:#c0392b;">CLEAR ALL</button>
 
-<button id="addBtn">ADD TO QUEUE</button>
-<button id="clearBtn" style="background:#c0392b;">CLEAR ALL</button>
+  <div class="search-box">
+    <label for="search">Search Patient</label>
+    <div class="search-row">
+      <input type="text" id="search" placeholder="Type name here...">
+      <button id="searchBtn" type="button">SEARCH</button>
+      <button id="clearSearchBtn" type="button" style="background:#666;">CLEAR</button>
+    </div>
+    <p id="searchMsg"></p>
+  </div>
 
-<div class="search-box">
-<label for="search">Search Patient</label>
-<div class="search-row">
-<input type="text" id="search" placeholder="Type name here...">
-<button id="searchBtn" type="button">SEARCH</button>
-<button id="clearSearchBtn" type="button" style="background:#666;">CLEAR</button>
-</div>
-<p id="searchMsg"></p>
-</div>
-
-<div class="table-wrap">
-<table>
-<thead>
-<tr><th>Queue No.</th><th>Patient Name</th><th>Purpose</th><th>Date</th><th>Time</th><th>Delete</th></tr>
-</thead>
-<tbody id="queueList"></tbody>
-</table>
-</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Queue No.</th><th>Patient Name</th><th>Purpose</th><th>Date</th><th>Time</th><th>Delete</th></tr>
+      </thead>
+      <tbody id="queueList"></tbody>
+    </table>
+  </div>
 </div>
 
 <script>
-var queue = [];
-try { queue = JSON.parse(localStorage.getItem('caparanQueue') || '[]'); } catch(e){ queue = []; }
-var currentSearch = '';
+  var queue = [];
+  try { queue = JSON.parse(localStorage.getItem('caparanQueue') || '[]'); } catch(e){ queue = []; }
+  var currentSearch = '';
 
-function saveQueue(){ try{ localStorage.setItem('caparanQueue', JSON.stringify(queue)); }catch(e){} }
-function formatTimeToAMPM(time24) {
-  if (!time24) return '';
-  var parts = time24.split(':');
-  var hour = parseInt(parts[0], 10);
-  var minute = parts[1] || '00';
-  var ampm = hour >= 12 ? 'PM' : 'AM';
-  var hour12 = hour % 12;
-  if (hour12 === 0) hour12 = 12;
-  return hour12 + ':' + minute + ' ' + ampm;
-}
-function formatDateToMDY(dateStr) {
-  if (!dateStr) return '';
-  var parts = dateStr.split('-');
-  if (parts.length !== 3) return dateStr;
-  return parts[1] + '-' + parts[2] + '-' + parts[0];
-}
-function displayQueue() {
-  var list = document.getElementById('queueList');
-  var msg = document.getElementById('searchMsg');
-  list.innerHTML = '';
-  var count = 0;
-  for (var i = 0; i < queue.length; i++) {
-    var p = queue[i];
-    if (currentSearch !== '' && p.name.toLowerCase().indexOf(currentSearch) === -1) continue;
-    count++;
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>';
-    list.appendChild(tr);
+  function saveQueue(){
+    try{ localStorage.setItem('caparanQueue', JSON.stringify(queue)); }catch(e){}
   }
-  if (currentSearch !== '') {
-    if (count === 0) msg.textContent = "No patient found for '" + currentSearch + "'. Press CLEAR to show all.";
-    else msg.textContent = "Found " + count + " patient(s) for '" + currentSearch + "'";
-  } else {
-    if (queue.length === 0) {
-      list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>';
-      msg.textContent = '';
+
+  // AUTOMATIC DATE & TIME - galing sa system, hindi sa user input
+  function getAutoDateTime(){
+    var now = new Date();
+    var yyyy = now.getFullYear();
+    var mm = String(now.getMonth()+1).padStart(2,'0');
+    var dd = String(now.getDate()).padStart(2,'0');
+    var date = yyyy + '-' + mm + '-' + dd; // YYYY-MM-DD for storage
+    var hh = String(now.getHours()).padStart(2,'0');
+    var min = String(now.getMinutes()).padStart(2,'0');
+    var time = hh + ':' + min; // 24h for storage
+    return { date: date, time: time, now: now };
+  }
+
+  function updateCurrentDateTimeDisplay(){
+    var auto = getAutoDateTime();
+    var display = auto.now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) + ' | ' + auto.now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    document.getElementById('currentDateTime').textContent = display;
+  }
+  // Update every second para live talaga
+  updateCurrentDateTimeDisplay();
+  setInterval(updateCurrentDateTimeDisplay, 1000);
+
+  function formatTimeToAMPM(time24) {
+    if (!time24) return '';
+    var parts = time24.split(':');
+    var hour = parseInt(parts[0], 10);
+    var minute = parts[1] || '00';
+    var ampm = hour >= 12 ? 'PM' : 'AM';
+    var hour12 = hour % 12;
+    if (hour12 === 0) hour12 = 12;
+    return hour12 + ':' + minute + ' ' + ampm;
+  }
+
+  function formatDateToMDY(dateStr) {
+    if (!dateStr) return '';
+    var parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return parts[1] + '-' + parts[2] + '-' + parts[0];
+  }
+
+  function displayQueue() {
+    var list = document.getElementById('queueList');
+    var msg = document.getElementById('searchMsg');
+    list.innerHTML = '';
+    var count = 0;
+    for (var i = 0; i < queue.length; i++) {
+      var p = queue[i];
+      if (currentSearch !== '' && p.name.toLowerCase().indexOf(currentSearch) === -1) continue;
+      count++;
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>';
+      list.appendChild(tr);
+    }
+    if (currentSearch !== '') {
+      if (count === 0) msg.textContent = "No patient found for '" + currentSearch + "'. Press CLEAR to show all.";
+      else msg.textContent = "Found " + count + " patient(s) for '" + currentSearch + "'";
     } else {
-      msg.textContent = 'Showing all ' + queue.length + ' patient(s)';
+      if (queue.length === 0) {
+        list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>';
+        msg.textContent = '';
+      } else {
+        msg.textContent = 'Showing all ' + queue.length + ' patient(s)';
+      }
+    }
+    var btns = document.querySelectorAll('.deleteBtn');
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].onclick = function(){ deleteOne(parseInt(this.getAttribute('data-index'),10)); };
     }
   }
-  var btns = document.querySelectorAll('.deleteBtn');
-  for (var j = 0; j < btns.length; j++) {
-    btns[j].onclick = function(){ deleteOne(parseInt(this.getAttribute('data-index'),10)); };
+
+  function doSearch(){
+    currentSearch = document.getElementById('search').value.trim().toLowerCase();
+    displayQueue();
   }
-}
-function doSearch(){
-  currentSearch = document.getElementById('search').value.trim().toLowerCase();
-  displayQueue();
-}
-function clearSearch(){
-  document.getElementById('search').value = '';
-  currentSearch = '';
-  displayQueue();
-}
-function addPatient() {
-  var nameInput = document.getElementById('name');
-  var name = nameInput.value.trim();
-  var error = document.getElementById('error');
-  if (name === '') { error.style.display = 'block'; return; }
-  error.style.display = 'none';
-  var date = document.getElementById('visitDate').value;
-  var purpose = document.getElementById('purpose').value;
-  var time = document.getElementById('time').value;
-  if (date === '') {
-    var d = new Date();
-    date = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  function clearSearch(){
+    document.getElementById('search').value = '';
+    currentSearch = '';
+    displayQueue();
   }
-  if (time === '') {
-    var now = new Date();
-    time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-  }
-  if (purpose === '') { purpose = 'Check-up'; }
-  queue.push({ date: date, name: name, purpose: purpose, time: time });
-  saveQueue();
-  clearSearch();
-  displayQueue();
-  nameInput.value = '';
-  document.getElementById('purpose').value = '';
-  var dateInput = document.getElementById('visitDate');
-  dateInput.value = ''; dateInput.type = 'text';
-  var timeInput = document.getElementById('time');
-  timeInput.value = ''; timeInput.type = 'text';
-  alert('Added: ' + name);
-}
-function deleteOne(index) { queue.splice(index, 1); saveQueue(); displayQueue(); }
-function clearQueue() {
-  if (confirm("Are you sure you want to clear all patients from the queue?")) {
-    queue = [];
+
+  function addPatient() {
+    var nameInput = document.getElementById('name');
+    var name = nameInput.value.trim();
+    var error = document.getElementById('error');
+    if (name === '') { error.style.display = 'block'; return; }
+    error.style.display = 'none';
+
+    var purpose = document.getElementById('purpose').value;
+    if (purpose === '') { purpose = 'Check-up'; }
+
+    // DITO NA KINUKUHA AUTOMATIC - hindi na galing sa input
+    var auto = getAutoDateTime();
+    var date = auto.date;
+    var time = auto.time;
+
+    queue.push({ date: date, name: name, purpose: purpose, time: time });
     saveQueue();
     clearSearch();
     displayQueue();
-    alert('Queue cleared');
+    nameInput.value = '';
+    document.getElementById('purpose').value = '';
+    alert('Added: ' + name + ' | ' + formatDateToMDY(date) + ' ' + formatTimeToAMPM(time));
   }
-}
-document.getElementById('addBtn').onclick = addPatient;
-document.getElementById('clearBtn').onclick = clearQueue;
-document.getElementById('searchBtn').onclick = doSearch;
-document.getElementById('clearSearchBtn').onclick = clearSearch;
-document.getElementById('search').addEventListener('input', doSearch);
-document.getElementById('search').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ doSearch(); } });
-displayQueue();
+
+  function deleteOne(index) {
+    queue.splice(index, 1);
+    saveQueue();
+    displayQueue();
+  }
+
+  function clearQueue() {
+    if (confirm("Are you sure you want to clear all patients from the queue?")) {
+      queue = [];
+      saveQueue();
+      clearSearch();
+      displayQueue();
+      alert('Queue cleared');
+    }
+  }
+
+  document.getElementById('addBtn').onclick = addPatient;
+  document.getElementById('clearBtn').onclick = clearQueue;
+  document.getElementById('searchBtn').onclick = doSearch;
+  document.getElementById('clearSearchBtn').onclick = clearSearch;
+  document.getElementById('search').addEventListener('input', doSearch);
+  document.getElementById('search').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ doSearch(); } });
+  displayQueue();
 </script>
-<!-- PR Test: Search Feature Ready -->
-<!-- FR-02 Search added via Pull Request -->
 </body>
-</html>
+  </html>
