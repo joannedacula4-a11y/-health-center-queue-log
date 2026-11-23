@@ -79,6 +79,17 @@ function displayQueue() {
 }
 
 function addPatient() {
+  const nameInput = document.getElementById('patientName');
+  const name = nameInput.value.trim();
+  const purpose = document.getElementById('purpose').value;
+  const time = document.getElementById('timeArrival').value || "No Time";
+  if(!name) { alert('Please enter patient name'); return; }
+  queue.push({name: name, purpose: purpose, time: time});
+  localStorage.setItem('queue', JSON.stringify(queue));
+  nameInput.value = '';
+  render();
+  alert('Added: ' + name);
+    }
   let nameInput = document.getElementById('name');
   let name = nameInput.value.trim();
   let error = document.getElementById('error');
