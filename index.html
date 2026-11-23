@@ -12,6 +12,7 @@ h1 { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; font-we
 .subtitle { font-family: 'Merriweather', Georgia, 'Times New Roman', serif; font-weight: 400; text-align: center; color: #444; margin-top: 0; margin-bottom: 30px; line-height: 1.9; font-size: 16px; letter-spacing: 0.4px; }
 label { display: block; margin-top: 14px; font-weight: bold; line-height: 1.5; }
 input, select { width: 100%; padding: 14px 12px; margin-top: 6px; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; line-height: 1.5; background: white; display: block; }
+input::placeholder { color: #888; }
 select:invalid { color: #888; }
 button { width: 100%; padding: 14px; margin-top: 16px; background: #1a5c2a; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; line-height: 1.5; display: block; }
 #error { color: red; margin-top: 10px; display: none; font-weight: bold; }
@@ -30,7 +31,7 @@ td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 <p class="subtitle">Brgy. Caparan Ipil, Zamboanga Sibugay</p>
 
 <label for="name">Patient Name</label>
-<input type="text" id="name" placeholder="e.g. Juan Dela Cruz">
+<input type="text" id="name" placeholder="e.g. JoAnne Dacula">
 
 <label for="purpose">Purpose of Visit</label>
 <select id="purpose" required>
@@ -49,10 +50,10 @@ td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 </select>
 
 <label for="visitDate">Date</label>
-<input type="date" id="visitDate">
+<input type="text" id="visitDate" placeholder="Select Date" onfocus="this.type='date'" onblur="if(!this.value) this.type='text'">
 
 <label for="time">Time of Arrival</label>
-<input type="time" id="time">
+<input type="text" id="time" placeholder="Select Time of Arrival" onfocus="this.type='time'" onblur="if(!this.value) this.type='text'">
 <div id="error">Please enter a patient name.</div>
 
 <button id="addBtn">ADD TO QUEUE</button>
@@ -81,56 +82,4 @@ function formatTimeToAMPM(time24) {
   return hour12 + ':' + minute + ' ' + ampm;
 }
 function formatDateToMDY(dateStr) {
-  if (!dateStr) return '';
-  var parts = dateStr.split('-');
-  if (parts.length !== 3) return dateStr;
-  return parts[1] + '-' + parts[2] + '-' + parts[0];
-}
-function displayQueue() {
-  var list = document.getElementById('queueList');
-  list.innerHTML = '';
-  for (var i = 0; i < queue.length; i++) {
-    var p = queue[i];
-    list.innerHTML += '<tr><td>' + (i+1) + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" onclick="deleteOne(' + i + ')">X</button></td></tr>';
-  }
-}
-function addPatient() {
-  var nameInput = document.getElementById('name');
-  var name = nameInput.value.trim();
-  var error = document.getElementById('error');
-  if (name === '') { error.style.display = 'block'; return; }
-  error.style.display = 'none';
-  var date = document.getElementById('visitDate').value;
-  var purpose = document.getElementById('purpose').value;
-  var time = document.getElementById('time').value;
-  if (date === '') {
-    var d = new Date();
-    date = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  }
-  if (time === '') {
-    var now = new Date();
-    time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-  }
-  if (purpose === '') { purpose = 'Check-up'; }
-  queue.push({ date: date, name: name, purpose: purpose, time: time });
-  displayQueue();
-  nameInput.value = '';
-  document.getElementById('purpose').value = '';
-  document.getElementById('visitDate').value = '';
-  document.getElementById('time').value = '';
-  alert('Added: ' + name);
-}
-function deleteOne(index) { queue.splice(index, 1); displayQueue(); }
-function clearQueue() {
-  if (confirm("Are you sure you want to clear all patients from the queue?")) {
-    queue = [];
-    displayQueue();
-    alert('Queue cleared');
-  }
-}
-document.getElementById('addBtn').addEventListener('click', addPatient);
-document.getElementById('clearBtn').addEventListener('click', clearQueue);
-displayQueue();
-</script>
-</body>
-</html>
+  if
