@@ -99,10 +99,17 @@ function validateName(rawName){
 }
 function displayQueue() {
   var list = document.getElementById('queueList'); var msg = document.getElementById('searchMsg'); list.innerHTML = ''; var count = 0;
-  for (var i = 0; i < queue.length; i++) { var p = queue[i]; if (currentSearch !== '' && normalizeName(p.name) !== currentSearch) continue; count++; var tr = document.createElement('tr'); tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>'; list.appendChild(tr); }
+  for (var i = 0; i < queue.length; i++) {
+    var p = queue[i];
+    if (currentSearch !== '' && normalizeName(p.name) !== currentSearch) continue;
+    count++;
+    var tr = document.createElement('tr');
+    // FIXED: inline onclick para sigurado tatawagin si deleteOne
+    tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" onclick="deleteOne(' + i + ')">X</button></td>';
+    list.appendChild(tr);
+  }
   if (currentSearch !== '') { if (count === 0) msg.textContent = "No patient found for '" + document.getElementById('search').value.trim() + "'. Please type complete name."; else msg.textContent = "Found " + count + " patient(s) for '" + document.getElementById('search').value.trim() + "'"; }
   else { if (queue.length === 0) { list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>'; msg.textContent = ''; } else { msg.textContent = 'Showing all ' + queue.length + ' patient(s)'; } }
-  var btns = document.querySelectorAll('.deleteBtn'); for (var j = 0; j < btns.length; j++) { btns[j].onclick = function(){ deleteOne(parseInt(this.getAttribute('data-index'),10)); }; }
 }
 function doSearch(){ currentSearch = normalizeName(document.getElementById('search').value); displayQueue(); }
 function clearSearch(){ document.getElementById('search').value = ''; currentSearch = ''; displayQueue(); }
@@ -114,15 +121,18 @@ function addPatient() {
   var name = check.clean;
   var purpose = document.getElementById('purpose').value;
   if (purpose === '') { error.textContent = 'Please select Purpose of Visit.'; error.style.display = 'block'; alert('Please select Purpose of Visit.'); return; }
-  // --- FIXED: REJECT DUPLICATE NAME (ignore case, ignore extra spaces) ---
-  var isDuplicate = queue.some(function(p){ return normalizeName(p.name) === normalizeName(name); });
-  if (isDuplicate) { var dupMsg = 'Patient already in queue: ' + name + '. Duplicate name is not allowed.'; error.textContent = dupMsg; error.style.display = 'block'; alert(dupMsg); nameInput.focus(); return; }
-  var auto = getAutoDateTime(); var date = auto.date; var time = auto.time;
-  queue.push({ date: date, name: name, purpose: purpose, time: time });
+  // FIXED: REJECT DUPLICATE NAME - kahit iba Purpose, bawal ulitin Name
+  for (var d = 0; d < queue.length; d++) {
+    if (normalizeName(queue[d].name) === normalizeName(name)) {
+      var dupMsg = 'Patient already in queue: ' + name + '. Duplicate name is not allowed.';
+      error.textContent = dupMsg; error.style.display = 'block'; alert(dupMsg); nameInput.focus(); return;
+    }
+  }
+  var auto = getAutoDateTime();
+  queue.push({ date: auto.date, name: name, purpose: purpose, time: auto.time });
   saveQueue(); clearSearch(); displayQueue(); nameInput.value = ''; document.getElementById('purpose').value = '';
-  alert('Added: ' + name + ' | ' + formatDateToMDY(date) + ' ' + formatTimeToAMPM(time));
+  alert('Added: ' + name + ' | ' + formatDateToMDY(auto.date) + ' ' + formatTimeToAMPM(auto.time));
 }
-// --- FIXED: DELETE WITH CONFIRMATION ---
 function deleteOne(index) {
   var p = queue[index]; if (!p) return;
   if (confirm('Are you sure you want to delete ' + p.name + '?')) { queue.splice(index, 1); saveQueue(); displayQueue(); }
