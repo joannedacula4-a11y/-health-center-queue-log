@@ -1,21 +1,35 @@
-       HEALTH CENTER QUEUE LOG
+      HEALTH CENTER QUEUE LOG
+      
+Location: Brgy. Caparan Ipil, Zamboanga Sibugay
 
- Location: Brgy. Caparan Ipil, Zamboanga Sibugay
+PROBLEM STATEMENT
 
-PROBLEM STATEMENT 
+In Brgy. Caparan Ipil, Zamboanga Sibugay, health workers and patients struggle to keep track of the patient queue and know who is next because there is no proper list of patients, only verbal calling, so the queue becomes disorganized, crowded and slow. A web page where the health worker can add patients to an organized queue list would help.
 
-In Brgy. Caparan Ipil, Zamboanga Sibugay, health workers and patients struggle to keep track of the patient queue and know who is next because there is no proper list of patients, only verbal calling, so the queue becomes disorganized, crowded and slow. A web page where the health worker can add patients to an organized queue list with a queue number, name, purpose and time of arrival would help.
+REQUIREMENT
 
- REQUIREMENT
+FR-01: Health worker can add a patient to the queue.
 
-**FR-01:** Health worker can add a patient to the queue: patient name, purpose of visit, date and time of arrival.
+Health worker types ONLY:
+- Patient Name (First Name + Last Name, First letter of each name must be Uppercase. Example: JoAnne Dacula)
+- Purpose of Visit
 
-**FR-02 (2nd feature via Pull Request):** Health worker can search a patient by name. Typing in the Search box filters the list. Pressing CLEAR shows all patients again.
+The app AUTOMATICALLY adds:
+- Queue Number
+- Date
+- Time of Arrival
 
- ACCEPTANCE CRITERIA 
+The health worker DOES NOT type the date and time. This is to prevent bias. No one can change the time to make their friends or family first.
 
-1. Saving with a blank patient name is rejected and an error message appears.
-2. Saving with only spaces in the patient name is rejected.
-3. Entries are still there after a page refresh because the data is saved in localStorage.
-4. The new patient appears at the end of the queue with the correct next queue number and time.
-5. Searching for a name shows only the matching patient(s). Searching for a name that is not in the list shows "No patient found".
+FR-02 (2nd feature via Pull Request): Health worker can search a patient by complete name. Typing in the Search box shows only the matching patient. Pressing CLEAR shows all patients again.
+
+ACCEPTANCE CRITERIA
+1. Add patient with Name + Purpose, appears at the end of the queue with correct next Queue Number and automatic Date and Time.
+2. Saving with a blank patient name is rejected and an error message appears.
+3. Saving with only spaces in the patient name is rejected.
+4. Saving with only one name (e.g. JoAnne) is rejected. Must be First Name + Last Name.
+5. Saving with lowercase name (e.g. joanne dacula, JoAnne dacula) is rejected. First letter of First Name and Last Name must be Uppercase.
+6. Saving with numbers or symbols in name is rejected. Letters only.
+7. Entries are still there after a page refresh because the data is saved in localStorage.
+8. Searching for a complete name shows only the matching patient(s).
+9. Searching for a name that is not in the list, or incomplete name, shows "No patient found".
