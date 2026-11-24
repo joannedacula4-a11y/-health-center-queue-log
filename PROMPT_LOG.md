@@ -1,16 +1,41 @@
-Entry 1: Initial App Structure & FR 01 (Patient Queue Management)
-Date: 2026-11-22
-Target Requirement: — Add a patient to the queue with queue number, patient name, purpose of visit, and time of arrival
-Prompt Used:
-Build a clean, responsive web page for health workers in Barangay. Caparan, Ipil, Zamboanga Sibugay to manage a clinic patient queue instead of relying on verbal calling. Implement FR-01 so a health worker can add a patient with their name, purpose of visit, time of arrival, and an automatically assigned sequential queue number, displaying new patients at the end of the organized queue list.
-Summary of AI Output: Created the HTML structure, patient registration form, queue display table/list, and JavaScript logic to automatically assign sequential queue numbers and record the time of arrival.
-Decision & Edits Made: Accepted the layout and queue numbering logic, and adjusted the labels and purpose options to match a barangay health station workflow.
+## 1 · Purpose validation
+- Prompt: Reject blank Purpose. Require at least 3 letters, only letters and spaces. Example: Check Up, Dental.
+- Result: Added validatePurpose function. Blank Purpose rejected, Check Up accepted.
+- Verified: Tested blank Purpose -> rejected, Check Up -> accepted.
+- Commit: Add Purpose validation
 
-Entry 2: Input Validation for Blank and Whitespace-Only Names
-Date: 2026-11-22
-Target Requirement: Acceptance Criteria 1 & 2 — Reject blank or space-only patient names with a clear error message
-Prompt Used:
-Add input validation to the patient form so that saving with a blank patient name or a name containing only spaces (e.g., "   ") is rejected. When rejected, display a clear error message on screen and prevent the invalid entry from being added to the queue.
-Summary of AI Output: Added .trim() validation on the patient name field before saving, along with an inline error alert that clears once valid input is provided.
-Decision & Edits Made: Tested both empty submissions and spaces-only inputs to verify that neither gets saved and the error message appears properly.
-patients, refreshed the page to confirm the entries remained in order, and verified that no real patient information or secrets were committed.
+## 2 · Delete with confirmation
+- Prompt: Add a Delete button per patient. Before deleting, show a confirmation: Are you sure you want to delete JoAnne Dacula? Use confirm(). After delete, update the list and Queue No.
+- Result: Added deletePatient function with confirm dialog.
+- Verified: Tested delete JoAnne Dacula -> clicked OK, patient removed. Clicked Cancel, patient stayed.
+- Commit: Add delete with confirmation
+
+## 3 · Search by Name
+- Prompt: Add a search box on top of the list. When health worker types a name, filter the list in real time. Search should ignore uppercase/lowercase. Show "No patient found" if no match.
+- Result: Added search input with filter function.
+- Verified: Tested search "joanne" -> showed JoAnne Dacula. Search "zzz" -> showed No patient found.
+- Commit: Add search by Name
+
+## 4 · Auto Queue No. after delete
+- Prompt: Queue No. should always be 1, 2, 3 in order. After deleting a patient, renumber the remaining patients automatically. Do not reuse deleted Queue No. incorrectly.
+- Result: Added renumber function after delete.
+- Verified: Tested delete Queue No. 2 -> remaining patients became 1, 2.
+- Commit: Fix Queue No. renumber
+
+## 5 · Clear All button
+- Prompt: Add a Clear All button. Before clearing, show confirmation: Are you sure you want to clear all patients? After clearing, localStorage should also be empty.
+- Result: Added clearAll function that clears list and localStorage.
+- Verified: Tested Clear All -> clicked OK, list empty, refresh page, still empty.
+- Commit: Add Clear All button
+
+## 6 · Date and Time format
+- Prompt: Date should be MM/DD/YYYY and Time should be 12-hour format with AM/PM. Example: 11/24/2026, 02:30 PM. Date and Time are automatic when adding a patient, health worker cannot edit them.
+- Result: Updated date and time formatting using toLocaleDateString and toLocaleTimeString.
+- Verified: Tested add patient -> showed 11/24/2026, 02:30 PM.
+- Commit: Fix Date and Time format
+
+## 7 · Prevent duplicate patient
+- Prompt: Do not allow same Name + Purpose twice on the same day. If JoAnne Dacula with Check Up already exists today, show alert: Patient already in queue today.
+- Result: Added duplicate check before adding.
+- Verified: Tested add JoAnne Dacula Check Up twice -> second one rejected with alert.
+- Commit: Prevent duplicate patient
