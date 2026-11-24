@@ -39,7 +39,7 @@ td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 <div class="auto-time"> Date & Time is Automatic<br> <span id="currentDateTime">Loading...</span> </div>
 <label for="name">Patient Name</label>
 <input type="text" id="name" placeholder="e.g. JoAnne Dacula" autocomplete="off">
-<small style="color:#666;">Required: First Name + Last Name. First letter of each name must be Uppercase. Example: Juan Dela Cruz</small>
+<small style="color:#666;">Required: First Name + Last Name. First letter of each name must be Uppercase. Example: JoAnne Dacula</small>
 <label for="purpose">Purpose of Visit</label>
 <select id="purpose" required>
 <option value="" disabled selected>Select Purpose of Visit</option>
@@ -86,34 +86,30 @@ function formatTimeToAMPM(time24) { if (!time24) return ''; var parts = time24.s
 function formatDateToMDY(dateStr) { if (!dateStr) return ''; var parts = dateStr.split('-'); if (parts.length !== 3) return dateStr; return parts[1] + '-' + parts[2] + '-' + parts[0]; }
 function normalizeName(str){ return str.trim().toLowerCase().replace(/\s+/g, ' '); }
 
-// FIXED VALIDATION - STRICT UPPERCASE CHECK
+// FIXED VALIDATION - FIRST LETTER MUST BE UPPERCASE (allows JoAnne)
 function validateName(rawName){
   var clean = rawName.trim().replace(/\s+/g, ' ');
-  // 1. Blank
   if (clean === '') { return { valid: false, message: 'Please enter a patient name.' }; }
-  // 2. Symbols / Numbers - BAWAL
   if (/[0-9@#$%^&*()_+=\[\]{};:\\|\"<>\/?.!,~`]/.test(clean)) { return { valid: false, message: 'Invalid name. Letters only. No numbers or symbols.' }; }
   if (!/^[A-Za-zÑñ' \-]+$/.test(clean)) { return { valid: false, message: 'Invalid name. Letters only. No numbers or symbols.' }; }
-  // 3. Kailangan may SPACE = First + Last
   if (clean.indexOf(' ') === -1) { return { valid: false, message: 'Please enter First Name and Last Name. One name is not allowed.' }; }
   var parts = clean.split(' ').filter(function(w){ return w.length > 0; });
   if (parts.length < 2) { return { valid: false, message: 'Please enter First Name and Last Name. One name is not allowed.' }; }
-  // 4. Bawat word at least 2 letters
   for (var i = 0; i < parts.length; i++) {
     var wordOnlyLetters = parts[i].replace(/['-]/g, '');
     if (wordOnlyLetters.length < 2) { return { valid: false, message: 'First Name and Last Name must be at least 2 letters each.' }; }
   }
-  // 5. NEW: STRICT UPPERCASE - First letter of EVERY word must be Uppercase, rest must be lowercase
-  // Juan Dela Cruz = OK, juan dela = REJECT, Juan dela = REJECT, JUAN DELA = REJECT
+  // NEW: First letter of EVERY word must be Uppercase
+  // JoAnne Dacula = OK, Juan Dela Cruz = OK, juan dela = REJECT, JoAnne dacula = REJECT
   for (var j = 0; j < parts.length; j++) {
     var word = parts[j];
-    // Support hyphen/apostrophe like Dela-Cruz, D'Angelo: check each part
     var subWords = word.split(/[-']/);
     for (var k = 0; k < subWords.length; k++) {
       var sub = subWords[k];
       if (sub.length === 0) continue;
-      if (!/^[A-ZÑ][a-zñ]+$/.test(sub)) {
-        return { valid: false, message: 'Invalid name format. First letter of First Name and Last Name must be Uppercase. Example: Juan Dela Cruz' };
+      // First char must be A-Z or Ñ, rest must be letters only (allows JoAnne, McDonald)
+      if (!/^[A-ZÑ][A-Za-zÑñ]+$/.test(sub)) {
+        return { valid: false, message: 'Invalid name format. First letter of First Name and Last Name must be Uppercase. Example: JoAnne Dacula' };
       }
     }
   }
