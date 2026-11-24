@@ -69,7 +69,7 @@ td:nth-child(4), td:nth-child(5) { white-space: nowrap; }
 </div>
 <div class="table-wrap">
 <table>
-<thead> <tr><th>Queue No.</th><th>Patient Name</th><th>Purpose</th><th>Date</th><th>Time</th><th>Delete</th></tr> </thead>
+<thead><tr><th>Queue No.</th><th>Patient Name</th><th>Purpose</th><th>Date</th><th>Time</th><th>Delete</th></tr></thead>
 <tbody id="queueList"></tbody>
 </table>
 </div>
@@ -85,8 +85,6 @@ updateCurrentDateTimeDisplay(); setInterval(updateCurrentDateTimeDisplay, 1000);
 function formatTimeToAMPM(time24) { if (!time24) return ''; var parts = time24.split(':'); var hour = parseInt(parts[0], 10); var minute = parts[1] || '00'; var ampm = hour >= 12 ? 'PM' : 'AM'; var hour12 = hour % 12; if (hour12 === 0) hour12 = 12; return hour12 + ':' + minute + ' ' + ampm; }
 function formatDateToMDY(dateStr) { if (!dateStr) return ''; var parts = dateStr.split('-'); if (parts.length !== 3) return dateStr; return parts[1] + '-' + parts[2] + '-' + parts[0]; }
 function normalizeName(str){ return str.trim().toLowerCase().replace(/\s+/g, ' '); }
-
-// FIXED VALIDATION - FIRST LETTER MUST BE UPPERCASE (allows JoAnne)
 function validateName(rawName){
   var clean = rawName.trim().replace(/\s+/g, ' ');
   if (clean === '') { return { valid: false, message: 'Please enter a patient name.' }; }
@@ -95,79 +93,40 @@ function validateName(rawName){
   if (clean.indexOf(' ') === -1) { return { valid: false, message: 'Please enter First Name and Last Name. One name is not allowed.' }; }
   var parts = clean.split(' ').filter(function(w){ return w.length > 0; });
   if (parts.length < 2) { return { valid: false, message: 'Please enter First Name and Last Name. One name is not allowed.' }; }
-  for (var i = 0; i < parts.length; i++) {
-    var wordOnlyLetters = parts[i].replace(/['-]/g, '');
-    if (wordOnlyLetters.length < 2) { return { valid: false, message: 'First Name and Last Name must be at least 2 letters each.' }; }
-  }
-  // NEW: First letter of EVERY word must be Uppercase
-  // JoAnne Dacula = OK, Juan Dela Cruz = OK, juan dela = REJECT, JoAnne dacula = REJECT
-  for (var j = 0; j < parts.length; j++) {
-    var word = parts[j];
-    var subWords = word.split(/[-']/);
-    for (var k = 0; k < subWords.length; k++) {
-      var sub = subWords[k];
-      if (sub.length === 0) continue;
-      // First char must be A-Z or Ñ, rest must be letters only (allows JoAnne, McDonald)
-      if (!/^[A-ZÑ][A-Za-zÑñ]+$/.test(sub)) {
-        return { valid: false, message: 'Invalid name format. First letter of First Name and Last Name must be Uppercase. Example: JoAnne Dacula' };
-      }
-    }
-  }
+  for (var i = 0; i < parts.length; i++) { var wordOnlyLetters = parts[i].replace(/['-]/g, ''); if (wordOnlyLetters.length < 2) { return { valid: false, message: 'First Name and Last Name must be at least 2 letters each.' }; } }
+  for (var j = 0; j < parts.length; j++) { var word = parts[j]; var subWords = word.split(/[-']/); for (var k = 0; k < subWords.length; k++) { var sub = subWords[k]; if (sub.length === 0) continue; if (!/^[A-ZÑ][A-Za-zÑñ]+$/.test(sub)) { return { valid: false, message: 'Invalid name format. First letter of First Name and Last Name must be Uppercase. Example: JoAnne Dacula' }; } } }
   return { valid: true, message: '', clean: clean };
 }
-
 function displayQueue() {
-  var list = document.getElementById('queueList');
-  var msg = document.getElementById('searchMsg');
-  list.innerHTML = '';
-  var count = 0;
-  for (var i = 0; i < queue.length; i++) {
-    var p = queue[i];
-    if (currentSearch !== '' && normalizeName(p.name) !== currentSearch) continue;
-    count++;
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>';
-    list.appendChild(tr);
-  }
-  if (currentSearch !== '') {
-    if (count === 0) msg.textContent = "No patient found for '" + document.getElementById('search').value.trim() + "'. Please type complete name.";
-    else msg.textContent = "Found " + count + " patient(s) for '" + document.getElementById('search').value.trim() + "'";
-  } else {
-    if (queue.length === 0) { list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>'; msg.textContent = ''; }
-    else { msg.textContent = 'Showing all ' + queue.length + ' patient(s)'; }
-  }
-  var btns = document.querySelectorAll('.deleteBtn');
-  for (var j = 0; j < btns.length; j++) { btns[j].onclick = function(){ deleteOne(parseInt(this.getAttribute('data-index'),10)); }; }
+  var list = document.getElementById('queueList'); var msg = document.getElementById('searchMsg'); list.innerHTML = ''; var count = 0;
+  for (var i = 0; i < queue.length; i++) { var p = queue[i]; if (currentSearch !== '' && normalizeName(p.name) !== currentSearch) continue; count++; var tr = document.createElement('tr'); tr.innerHTML = '<td>' + count + '</td><td>' + p.name + '</td><td>' + p.purpose + '</td><td>' + formatDateToMDY(p.date) + '</td><td>' + formatTimeToAMPM(p.time) + '</td><td><button class="deleteBtn" data-index="' + i + '">X</button></td>'; list.appendChild(tr); }
+  if (currentSearch !== '') { if (count === 0) msg.textContent = "No patient found for '" + document.getElementById('search').value.trim() + "'. Please type complete name."; else msg.textContent = "Found " + count + " patient(s) for '" + document.getElementById('search').value.trim() + "'"; }
+  else { if (queue.length === 0) { list.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No patients in queue yet. Add one above.</td></tr>'; msg.textContent = ''; } else { msg.textContent = 'Showing all ' + queue.length + ' patient(s)'; } }
+  var btns = document.querySelectorAll('.deleteBtn'); for (var j = 0; j < btns.length; j++) { btns[j].onclick = function(){ deleteOne(parseInt(this.getAttribute('data-index'),10)); }; }
 }
 function doSearch(){ currentSearch = normalizeName(document.getElementById('search').value); displayQueue(); }
 function clearSearch(){ document.getElementById('search').value = ''; currentSearch = ''; displayQueue(); }
 function addPatient() {
-  var nameInput = document.getElementById('name');
-  var error = document.getElementById('error');
+  var nameInput = document.getElementById('name'); var error = document.getElementById('error');
   var check = validateName(nameInput.value);
-  if (!check.valid) {
-    error.textContent = check.message;
-    error.style.display = 'block';
-    alert(check.message);
-    nameInput.focus();
-    return;
-  }
+  if (!check.valid) { error.textContent = check.message; error.style.display = 'block'; alert(check.message); nameInput.focus(); return; }
   error.style.display = 'none';
   var name = check.clean;
   var purpose = document.getElementById('purpose').value;
-  if (purpose === '') { purpose = 'Check-up'; }
-  var auto = getAutoDateTime();
-  var date = auto.date;
-  var time = auto.time;
+  if (purpose === '') { error.textContent = 'Please select Purpose of Visit.'; error.style.display = 'block'; alert('Please select Purpose of Visit.'); return; }
+  // --- FIXED: REJECT DUPLICATE NAME (ignore case, ignore extra spaces) ---
+  var isDuplicate = queue.some(function(p){ return normalizeName(p.name) === normalizeName(name); });
+  if (isDuplicate) { var dupMsg = 'Patient already in queue: ' + name + '. Duplicate name is not allowed.'; error.textContent = dupMsg; error.style.display = 'block'; alert(dupMsg); nameInput.focus(); return; }
+  var auto = getAutoDateTime(); var date = auto.date; var time = auto.time;
   queue.push({ date: date, name: name, purpose: purpose, time: time });
-  saveQueue();
-  clearSearch();
-  displayQueue();
-  nameInput.value = '';
-  document.getElementById('purpose').value = '';
+  saveQueue(); clearSearch(); displayQueue(); nameInput.value = ''; document.getElementById('purpose').value = '';
   alert('Added: ' + name + ' | ' + formatDateToMDY(date) + ' ' + formatTimeToAMPM(time));
 }
-function deleteOne(index) { queue.splice(index, 1); saveQueue(); displayQueue(); }
+// --- FIXED: DELETE WITH CONFIRMATION ---
+function deleteOne(index) {
+  var p = queue[index]; if (!p) return;
+  if (confirm('Are you sure you want to delete ' + p.name + '?')) { queue.splice(index, 1); saveQueue(); displayQueue(); }
+}
 function clearQueue() { if (confirm("Are you sure you want to clear all patients from the queue?")) { queue = []; saveQueue(); clearSearch(); displayQueue(); alert('Queue cleared'); } }
 document.getElementById('addBtn').onclick = addPatient;
 document.getElementById('clearBtn').onclick = clearQueue;
@@ -178,4 +137,4 @@ document.getElementById('name').addEventListener('keydown', function(e){ if(e.ke
 displayQueue();
 </script>
 </body>
-</html>
+  </html>
