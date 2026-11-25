@@ -5,16 +5,16 @@
 - Commit: Add Purpose validation
 
 ## 2 · Delete with confirmation
-- Prompt: Add a Delete button per patient. Before deleting, show a confirmation: Are you sure you want to delete JoAnne Dacula? Use confirm(). After delete, update the list and Queue No.
+- Prompt: Add a Delete button per patient. Before deleting, show a confirmation: Are you sure you want to delete Mikha Lhim? Use confirm(). After delete, update the list and Queue No.
 - Result: Added deletePatient function with confirm dialog.
-- Verified: Tested delete JoAnne Dacula -> clicked OK, patient removed. Clicked Cancel, patient stayed.
+- Verified: Tested delete Mhika Lhim-> clicked OK, patient removed. Clicked Cancel, patient stayed.
 - Commit: Add delete with confirmation
 
 ## 3 · Search by Name
 - Prompt: Add a search box on top of the list. When health worker types a name, filter the list in real time. Search should ignore uppercase/lowercase. Show "No patient found" if no match.
 - Result: Added search input with filter function.
-- Verified: Tested search "joanne" -> showed JoAnne Dacula. Search "zzz" -> showed No patient found.
-- Commit: Add search by Name
+- Verified: Tested search "jenny" -> showed Jenny Santos. Search "zzz" -> showed No patient found.
+- Commit: Add search by Complete Name
 
 ## 4 · Auto Queue No. after delete
 - Prompt: Queue No. should always be 1, 2, 3 in order. After deleting a patient, renumber the remaining patients automatically. Do not reuse deleted Queue No. incorrectly.
@@ -35,7 +35,7 @@
 - Commit: Fix Date and Time format
 
 ## 7 · Prevent duplicate patient
-- Prompt: Do not allow same Name + Purpose twice on the same day. If JoAnne Dacula with Check Up already exists today, show alert: Patient already in queue today.
+- Prompt: Do not allow same Name + Purpose twice on the same day. If James Reyes with Check Up already exists today, show alert: Patient already in queue today.
 - Result: Added duplicate check before adding.
-- Verified: Tested add JoAnne Dacula Check Up twice -> second one rejected with alert.
+- Verified: Tested add James Reyes Check Up twice -> second one rejected with alert.
 - Commit: Prevent duplicate patient
