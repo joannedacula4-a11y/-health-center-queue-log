@@ -4,7 +4,7 @@ Location:  Brgy. Caparan Ipil
 
 PROBLEM STATEMENT
 
-In Brgy. Caparan Ipil, Zamboanga Sibugay, health workers and patients struggle to keep track of the patient queue and know who is next because there is no proper list of patients, only verbal calling, so the queue becomes disorganized, crowded and slow. A web page where the health worker can add patients to an organized queue list would help.
+In Brgy. Caparan Ipil health workers and patients struggle to keep track of the patient queue and know who is next because there is no proper list of patients, only verbal calling, so the queue becomes disorganized, crowded and slow. A web page where the health worker can add patients to an organized queue list would help.
 
 REQUIREMENT
 
