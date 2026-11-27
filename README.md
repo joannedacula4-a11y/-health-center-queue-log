@@ -1,6 +1,6 @@
       HEALTH CENTER QUEUE LOG
       
-Location: Brgy. Caparan Ipil
+Location:  Brgy. Caparan Ipil
 
 PROBLEM STATEMENT
 
