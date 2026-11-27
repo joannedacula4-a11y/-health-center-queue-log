@@ -28,8 +28,9 @@ ACCEPTANCE CRITERIA
 2. Saving with a blank patient name is rejected and an error message appears.
 3. Saving with only spaces in the patient name is rejected.
 4. Saving with only one name (e.g. Jenny) is rejected. Must be First Name + Last Name.
-5. Saving with lowercase name (e.g. joanne dacula, Jenny Santos) is rejected. First letter of First Name and Last Name must be Uppercase.
+5. Saving with lowercase name (e.g. jenny reyes, Jenny reyes) is rejected. First letter of First Name and Last Name must be Uppercase.
 6. Saving with numbers or symbols in name is rejected. Letters only.
 7. Entries are still there after a page refresh because the data is saved in localStorage.
 8. Searching for a complete name shows only the matching patient(s).
 9. Searching for a name that is not in the list, or incomplete name, shows "No patient found".
+10. Duplicate(double entry) is rejected.
